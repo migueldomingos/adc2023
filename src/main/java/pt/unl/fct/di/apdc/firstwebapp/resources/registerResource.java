@@ -17,6 +17,7 @@ import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.*;
 
 @Path("/register")
@@ -31,12 +32,21 @@ public class registerResource {
 	@POST
 	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPersonToDatastoreV1(LoginData data) {	
+	public Response addPersonToDatastoreV1(LoginData data) {
+		if (!data.validRegistration())
+			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+
 		Key userKey = datastore.newKeyFactory().setKind("Person").newKey(data.username);
-		Entity person = Entity.newBuilder(userKey).set("password", data.password)
-												  .set("timestamp", fmt.format(new Date())).build();
-		datastore.put(person);
-		return Response.ok().build();
+		Entity person = datastore.get(userKey);
+
+		if (person == null) {
+			person = Entity.newBuilder(userKey).set("password", DigestUtils.sha512Hex(data.password))
+											   .set("timestamp", fmt.format(new Date())).build();
+			datastore.put(person);
+			return Response.ok().build();
+		}
+
+		return Response.status(Status.FORBIDDEN).entity("User already registered.").build();
 	}
 	
 	@POST
@@ -47,9 +57,9 @@ public class registerResource {
 		Entity person = datastore.get(userKey);
 		
 		if (person == null) {
-			if (!data.password.equals("") && !data.confirmation.equals("") && !data.email.equals("") && !data.name.equals("")) {
+			if (data.validRegistration()) {
 				if (data.password.equals(data.confirmation)) {
-					person = Entity.newBuilder(userKey).set("password", data.password)
+					person = Entity.newBuilder(userKey).set("password", DigestUtils.sha512Hex(data.password))
 							  						   .set("email", data.email)
 							  						   .set("name", data.name).build();
 					datastore.put(person);

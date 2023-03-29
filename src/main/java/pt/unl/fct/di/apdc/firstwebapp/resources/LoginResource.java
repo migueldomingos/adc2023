@@ -1,13 +1,17 @@
 package pt.unl.fct.di.apdc.firstwebapp.resources;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -17,7 +21,10 @@ import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.Timestamp;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.AuthToken;
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
 
@@ -80,33 +87,54 @@ public class LoginResource {
 	public Response loginUserV1 (LoginData data) {
 		Key userKey = datastore.newKeyFactory().setKind("Person").newKey(data.username);
 		Entity ent = datastore.get(userKey);
-		
-		if (data.password.equals(ent.getString("password"))) {
-			AuthToken at = new AuthToken(data.username);
-			return Response.ok(g.toJson(at)).build();
+
+		if (ent != null) {
+			String hashedPWD = DigestUtils.sha512Hex(data.password);
+			if (hashedPWD.equals(ent.getString("password"))) {
+				AuthToken at = new AuthToken(data.username);
+				return Response.ok(g.toJson(at)).build();
+			}
+			else
+				return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
 		}
+		else
+			return Response.status(Status.FORBIDDEN).entity("User does not exist.").build();
+
 		
-		return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
+
 	}
 	
 	@POST
 	@Path("/v2")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response loginUserV2 (LoginData data) {
+	@Produces(MediaType.APPLICATION_JSON + ";charset = utf-8")
+	public Response loginUserV2 (LoginData data, @Context HttpServletRequest request, @Context HttpHeaders headers) {
 		Key userKey = datastore.newKeyFactory().setKind("Person").newKey(data.username);
 		Entity ent = datastore.get(userKey);
-		
-		if (data.password.equals(ent.getString("password"))) {
-			AuthToken at = new AuthToken(data.username);
-			//POR FAZER PARTE DO LOG DA CONEXAO
-			
-			putSuccessOrErrorLogin("sucesso");
-			
-			return Response.ok(g.toJson(at)).build();
+
+		if (ent != null) {
+			String hashedPWD = DigestUtils.sha512Hex(data.password);
+			if (hashedPWD.equals(ent.getString("password"))) {
+				AuthToken at = new AuthToken(data.username);
+
+				KeyFactory logRegistKey = datastore.newKeyFactory().setKind("LogInfo");
+				Key k = datastore.allocateId(logRegistKey.newKey());
+				Entity logEnt = Entity.newBuilder(k).set("Connection local", headers.getHeaderString("X-Appengine-CityLatLong"))
+													.set("Connection IP", headers.getHeaderString("X-Appengine-User-IP"))
+													.build();
+				datastore.put(logEnt);
+
+				putSuccessOrErrorLogin("sucesso");
+
+				return Response.ok(g.toJson(at)).build();
+			}
+
+			putSuccessOrErrorLogin("erro");
+			return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
 		}
-		
-		putSuccessOrErrorLogin("erro");
-		return Response.status(Status.FORBIDDEN).entity("Incorrect password.").build();
+
+		return Response.status(Status.FORBIDDEN).entity("User does not exist.").build();
+
 	}
 	
 	private void putSuccessOrErrorLogin(String aux) {

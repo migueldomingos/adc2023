@@ -13,7 +13,12 @@ public class LoginDataUpgraded {
 		this.email = email;
 		this.name = name;
 	}
-	
+
+	public boolean validRegistration() {
+		return !username.equals(null) && !password.equals(null) &&
+				!confirmation.equals(null) && !email.equals(null) &&
+				!name.equals(null);
+	}
 	
 
 }

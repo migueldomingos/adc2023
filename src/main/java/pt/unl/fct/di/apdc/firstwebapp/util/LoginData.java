@@ -12,4 +12,8 @@ public class LoginData {
 		this.password = password;
 	}
 
+	public boolean validRegistration() {
+		return !username.equals(null) && !password.equals(null);
+	}
+
 }
