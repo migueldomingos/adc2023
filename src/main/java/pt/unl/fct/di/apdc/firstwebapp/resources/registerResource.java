@@ -1,8 +1,6 @@
 package pt.unl.fct.di.apdc.firstwebapp.resources;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -12,10 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.Key;
+import com.google.cloud.Timestamp;
+import com.google.cloud.datastore.*;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.*;
@@ -24,8 +20,8 @@ import pt.unl.fct.di.apdc.firstwebapp.util.*;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class registerResource {
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-	
-	private static final DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+
+	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 	
 	public registerResource() {}
 	
@@ -36,12 +32,12 @@ public class registerResource {
 		if (!data.validRegistration())
 			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
 
-		Key userKey = datastore.newKeyFactory().setKind("Person").newKey(data.username);
+		Key userKey = datastore.newKeyFactory().setKind("User1").newKey(data.username);
 		Entity person = datastore.get(userKey);
 
 		if (person == null) {
-			person = Entity.newBuilder(userKey).set("password", DigestUtils.sha512Hex(data.password))
-											   .set("timestamp", fmt.format(new Date())).build();
+			person = Entity.newBuilder(userKey).set("user_pwd", DigestUtils.sha512Hex(data.password))
+											   .set("user_creation_time", Timestamp.now()).build();
 			datastore.put(person);
 			return Response.ok().build();
 		}
@@ -53,24 +49,36 @@ public class registerResource {
 	@Path("/v2")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addPersonToDatastoreV2(LoginDataUpgraded data) {
-		Key userKey = datastore.newKeyFactory().setKind("PersonV2").newKey(data.username);
-		Entity person = datastore.get(userKey);
-		
-		if (person == null) {
-			if (data.validRegistration()) {
-				if (data.password.equals(data.confirmation)) {
-					person = Entity.newBuilder(userKey).set("password", DigestUtils.sha512Hex(data.password))
-							  						   .set("email", data.email)
-							  						   .set("name", data.name).build();
-					datastore.put(person);
-					return Response.ok().build();
-				} else
-					return Response.status(Status.FORBIDDEN).entity("Password is different from the confirmation.").build(); //pass e conf nao sao iguais
-			} else
-				return Response.status(Status.FORBIDDEN).entity("Data required is missing.").build(); //dados nao estao todos preenchidos	
-		} else
-			return Response.status(Status.FORBIDDEN).entity("User already registered.").build();  //user ja existe
-			
+		LOG.fine("Attempt to register user: " + data.username);
+
+		if (!data.validRegistration())
+			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+
+		Transaction txn = datastore.newTransaction();
+
+		try {
+			Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
+			Entity user = txn.get(userKey);
+
+			if (user != null) {
+				txn.rollback();
+				return Response.status(Status.BAD_REQUEST).entity("User already exists.").build();
+			} else {
+				user = Entity.newBuilder(userKey)
+						.set("user_name", data.name)
+						.set("user_pwd", DigestUtils.sha512Hex(data.password))
+						.set("user_email", data.email)
+						.set("user_creation_time", Timestamp.now())
+						.build();
+				txn.add(user);
+				LOG.info("User registered " + data.username);
+				txn.commit();
+				return Response.ok("{}").build();
+			}
+		} finally {
+			if (txn.isActive())
+				txn.rollback();
+		}
 	}
 	
 }
