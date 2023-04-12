@@ -18,12 +18,12 @@ import pt.unl.fct.di.apdc.firstwebapp.util.*;
 
 @Path("/register")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-public class registerResource {
+public class RegisterResource {
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
 	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 	
-	public registerResource() {}
+	public RegisterResource() {}
 	
 	@POST
 	@Path("/v1")
@@ -46,13 +46,16 @@ public class registerResource {
 	}
 	
 	@POST
-	@Path("/v2")
+	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPersonToDatastoreV2(LoginDataUpgraded data) {
+	public Response addPersonToDatastore(LoginData data) {
 		LOG.fine("Attempt to register user: " + data.username);
 
 		if (!data.validRegistration())
 			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+
+		if (!data.password.equals(data.confirmation))
+			return Response.status(Status.BAD_REQUEST).entity("Password and confirmation are not the same.").build();
 
 		Transaction txn = datastore.newTransaction();
 
@@ -64,16 +67,31 @@ public class registerResource {
 				txn.rollback();
 				return Response.status(Status.BAD_REQUEST).entity("User already exists.").build();
 			} else {
+				//user_role = USER | GS | GBO | SU
+				//user_state = 0 (INATIVO) | 1 (ATIVO)
+
 				user = Entity.newBuilder(userKey)
+						.set("user_username", data.username)
 						.set("user_name", data.name)
 						.set("user_pwd", DigestUtils.sha512Hex(data.password))
 						.set("user_email", data.email)
 						.set("user_creation_time", Timestamp.now())
+						.set("user_phone_num", data.phoneNum)
+						.set("user_role", "USER")
+						.set("user_state", 0)
+						.set("user_perfil", "PUBLIC")
+						.set("user_mobile_num", data.mobileNum)
+						.set("user_ocupation", data.ocupation)
+						.set("user_workspace", data.workspace)
+						.set("user_addr", data.addr)
+						.set("user_postal", data.postalCode)
+						.set("user_NIF", data.NIF)
 						.build();
+
 				txn.add(user);
 				LOG.info("User registered " + data.username);
 				txn.commit();
-				return Response.ok("{}").build();
+				return Response.ok("User registered!").build();
 			}
 		} finally {
 			if (txn.isActive())

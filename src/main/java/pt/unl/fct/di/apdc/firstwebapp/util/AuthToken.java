@@ -1,5 +1,6 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class AuthToken {
@@ -15,5 +16,10 @@ public class AuthToken {
 		this.tokenID = UUID.randomUUID().toString();
 		this.creationData = System.currentTimeMillis();
 		this.expirationData = this.creationData + AuthToken.EXPIRATION_TIME;
+	}
+
+	public boolean isExpired() {
+		long current = Instant.now().toEpochMilli();
+		return current > expirationData;
 	}
 }

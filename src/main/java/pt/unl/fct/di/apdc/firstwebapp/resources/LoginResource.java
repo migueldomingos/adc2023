@@ -26,7 +26,6 @@ import com.google.cloud.Timestamp;
 import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.AuthToken;
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
-import pt.unl.fct.di.apdc.firstwebapp.util.LoginDataUpgraded;
 
 /*
  * Path 
@@ -46,7 +45,7 @@ import pt.unl.fct.di.apdc.firstwebapp.util.LoginDataUpgraded;
  * nesse formato
  */
 
-@Path("/login")
+@Path("/login") // /rest/login
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class LoginResource {
 	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
@@ -168,6 +167,14 @@ public class LoginResource {
 				updateStats(true, txn, log, ctrsKey, stats);
 
 				AuthToken token = new AuthToken(data.username);
+				Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(token.tokenID);
+				Entity tokenEnt = Entity.newBuilder(tokenKey)
+								.set("token_username", token.username)
+								.set("token_id", token.tokenID)
+								.set("token_creation", token.creationData)
+								.set("token_expiration", token.expirationData)
+								.build();
+				txn.add(tokenEnt);
 				LOG.info("User '" + data.username + "' logged in sucessfully.");
 				return Response.ok(g.toJson(token)).build();
 			} else {
@@ -217,7 +224,7 @@ public class LoginResource {
 	@Path("/user")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response checkUsernameAvailable (LoginDataUpgraded data) {
+	public Response checkUsernameAvailable (LoginData data) {
 		Key userKey = userKeyFactory.newKey(data.username);
 		Entity user = datastore.get(userKey);
 		if (user != null && user.getString("user_pwd").equals(DigestUtils.sha512Hex(data.password))) {
