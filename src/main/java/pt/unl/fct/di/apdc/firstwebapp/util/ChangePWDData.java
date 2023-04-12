@@ -1,7 +1,6 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
 public class ChangePWDData {
-
     public String username, currentPwd, newPwd, confNewPwd;
 
     public ChangePWDData() {}

@@ -26,6 +26,7 @@ import com.google.cloud.Timestamp;
 import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.AuthToken;
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
+import pt.unl.fct.di.apdc.firstwebapp.util.RegisterData;
 
 /*
  * Path 
@@ -61,7 +62,7 @@ public class LoginResource {
 	@POST //indica que este metodo e acessivel atraves da operacao REST:POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON) //funcao vai receber dados dos clientes que vem no corpo do pedido HTTP
-	public Response doLogin(LoginData data) {
+	public Response doLogin(RegisterData data) {
 		LOG.fine("Login attempt by user: " + data.username);
 		
 		if(data.username.equals("miguel") && data.password.equals("password")) {
@@ -85,7 +86,7 @@ public class LoginResource {
 	@POST
 	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response loginUserV1 (LoginData data) {
+	public Response loginUserV1 (RegisterData data) {
 		LOG.fine("Attempt to login user: " + data.username);
 
 		Key userKey = userKeyFactory.newKey(data.username);
@@ -224,7 +225,7 @@ public class LoginResource {
 	@Path("/user")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response checkUsernameAvailable (LoginData data) {
+	public Response checkUsernameAvailable (RegisterData data) {
 		Key userKey = userKeyFactory.newKey(data.username);
 		Entity user = datastore.get(userKey);
 		if (user != null && user.getString("user_pwd").equals(DigestUtils.sha512Hex(data.password))) {

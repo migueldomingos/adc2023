@@ -1,6 +1,5 @@
 package pt.unl.fct.di.apdc.firstwebapp.resources;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 

@@ -28,7 +28,7 @@ public class RegisterResource {
 	@POST
 	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPersonToDatastoreV1(LoginData data) {
+	public Response addPersonToDatastoreV1(RegisterData data) {
 		if (!data.validRegistration())
 			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
 
@@ -48,7 +48,7 @@ public class RegisterResource {
 	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPersonToDatastore(LoginData data) {
+	public Response addPersonToDatastore(RegisterData data) {
 		LOG.fine("Attempt to register user: " + data.username);
 
 		if (!data.validRegistration())
