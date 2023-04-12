@@ -77,24 +77,20 @@ public class LoginResource {
 				txn.rollback();
 				return Response.status(Status.FORBIDDEN).entity("User does not exist.").build();
 			}
-			LOG.warning("entidade nao e null");
+
 			String hashedPWD = DigestUtils.sha512Hex(data.password);
-			LOG.warning("codificada agora: " + hashedPWD);
-			LOG.warning("antiga: " + ent.getString("user_pwd"));
+
 			if (hashedPWD.equals(ent.getString("user_pwd"))) {
-				LOG.warning("passou 1o if");
 				AuthToken token = new AuthToken(data.username);
 				Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.username);
 				Entity tokenEnt = txn.get(tokenKey);
-				LOG.warning("foi buscar token");
 
 				if (tokenEnt != null && tokenEnt.getLong("token_expiration") > Timestamp.now().toDate().getTime()) {
-					LOG.warning("passou no 2o if");
 					LOG.warning("User already logged in");
 					txn.rollback();
 					return Response.status(Status.FORBIDDEN).entity("User already logged in.").build();
 				}
-				LOG.warning("criacao da ent do token");
+
 				tokenEnt = Entity.newBuilder(tokenKey)
 						.set("token_username", token.username)
 						.set("token_id", token.tokenID)
@@ -104,7 +100,7 @@ public class LoginResource {
 				txn.put(tokenEnt);
 				LOG.info("User '" + data.username + "' logged in sucessfully.");
 				txn.commit();
-				return Response.ok(g.toJson(token)).build();
+				return Response.ok(g.toJson(ent)).build();
 			}
 			else {
 				LOG.warning("Wrong password for username: " + data.username);

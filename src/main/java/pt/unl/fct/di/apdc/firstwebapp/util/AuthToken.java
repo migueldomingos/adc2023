@@ -17,9 +17,4 @@ public class AuthToken {
 		this.creationData = System.currentTimeMillis();
 		this.expirationData = this.creationData + AuthToken.EXPIRATION_TIME;
 	}
-
-	public boolean isExpired() {
-		long current = Instant.now().toEpochMilli();
-		return current > expirationData;
-	}
 }
