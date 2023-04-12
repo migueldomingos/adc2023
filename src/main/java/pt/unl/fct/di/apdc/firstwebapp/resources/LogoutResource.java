@@ -20,17 +20,29 @@ public class LogoutResource {
 
     public LogoutResource() {} //construtor
 
-    @POST
+    @GET
     @Path("/{username}")
     public Response logOutUser(@PathParam("username") String username) {
         Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);
-        Entity token = datastore.get(tokenKey);
+        Transaction txn = datastore.newTransaction();
 
-        if (token != null) {
-            datastore.delete(tokenKey);
-            return Response.status(Status.OK).entity("User logged out.").build();
+        try{
+            Entity token = txn.get(tokenKey);
+
+            if (token != null) {
+                txn.delete(tokenKey);
+                LOG.warning("User logged out");
+                txn.commit();
+                return Response.status(Status.OK).entity("User logged out.").build();
+            }
+
+            txn.rollback();
+            return Response.status(Status.BAD_REQUEST).entity("User already logged out.").build();
+
+        } finally {
+            if (txn.isActive())
+                txn.rollback();
         }
 
-        return Response.status(Status.BAD_REQUEST).entity("User already logged out.").build();
     }
 }

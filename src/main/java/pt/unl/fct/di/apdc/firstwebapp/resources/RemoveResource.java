@@ -27,16 +27,20 @@ public class RemoveResource {
         Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);
         Entity token = datastore.get(tokenKey);
 
-        if (token == null) {
-            return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
-        }
-        else if (token.getLong("user_expiration") < Timestamp.now().toDate().getTime()) {
-            datastore.delete(tokenKey);
-            return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
-        }
-
         Transaction txn = datastore.newTransaction();
         try {
+            if (token == null) {
+                LOG.warning("token was null");
+                txn.rollback();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+            else if (token.getLong("token_expiration") < Timestamp.now().toDate().getTime()) {
+                LOG.warning("token expired");
+                txn.delete(tokenKey);
+                txn.commit();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+
             Key userKeyRem = userKeyFactory.newKey(userToRemove);
             Entity userToRem = txn.get(userKeyRem);
             Key userKey = userKeyFactory.newKey(username);

@@ -21,7 +21,7 @@ public class ChangeParamResource {
 
     private final KeyFactory userKeyFactory = datastore.newKeyFactory().setKind("User");
 
-    private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(ChangeParamResource.class.getName());
 
     public ChangeParamResource() {}
 
@@ -32,20 +32,24 @@ public class ChangeParamResource {
         //username do pathparam vai ser o user que quer mudar a info
         //data vai ter a info que vais ser modificada
 
-        Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);
-        Entity token = datastore.get(tokenKey);
-
-        if (token == null) {
-            return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
-        }
-        else if (token.getLong("user_expiration") < Timestamp.now().toDate().getTime()) {
-            datastore.delete(tokenKey);
-            return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
-        }
-
         Transaction txn = datastore.newTransaction();
 
         try {
+            Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);
+            Entity token = txn.get(tokenKey);
+
+            if (token == null) {
+                LOG.warning("token was null");
+                txn.rollback();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+            else if (token.getLong("token_expiration") < Timestamp.now().toDate().getTime()) {
+                LOG.warning("token expired");
+                txn.delete(tokenKey);
+                txn.commit();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+
             Key userKey = userKeyFactory.newKey(username);
             Entity user = txn.get(userKey);
 
@@ -211,6 +215,21 @@ public class ChangeParamResource {
         Transaction txn = datastore.newTransaction();
 
         try {
+            Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.username);
+            Entity token = txn.get(tokenKey);
+
+            if (token == null) {
+                LOG.warning("token was null");
+                txn.rollback();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+            else if (token.getLong("token_expiration") < Timestamp.now().toDate().getTime()) {
+                LOG.warning("token expired");
+                txn.delete(tokenKey);
+                txn.commit();
+                return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+            }
+
             Key userKey = userKeyFactory.newKey(data.username);
             Entity user = txn.get(userKey);
 

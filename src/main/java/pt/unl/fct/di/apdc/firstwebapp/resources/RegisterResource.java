@@ -21,7 +21,7 @@ import pt.unl.fct.di.apdc.firstwebapp.util.*;
 public class RegisterResource {
 	private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
-	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
+	private static final Logger LOG = Logger.getLogger(RegisterResource.class.getName());
 	
 	public RegisterResource() {}
 	
