@@ -27,7 +27,10 @@ public class RemoveResource {
         Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);
         Entity token = datastore.get(tokenKey);
 
-        if (token != null && token.getLong("user_expiration") < Timestamp.now().toDate().getTime()) {
+        if (token == null) {
+            return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
+        }
+        else if (token.getLong("user_expiration") < Timestamp.now().toDate().getTime()) {
             datastore.delete(tokenKey);
             return Response.status(Status.FORBIDDEN).entity("User not logged in.").build();
         }
