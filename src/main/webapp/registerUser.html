@@ -100,10 +100,10 @@
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data)
     })
-    .then(response => response.json())
+    .then(response => response)
     .then(data => {
-      alert(data);
       form.reset();
+      window.location.href = "/index.html";
     })
     .catch(error => console.error(error));
   });
