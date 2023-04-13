@@ -58,8 +58,26 @@
       })
       .then(response => response.json())
       .then((data) => {
-        const userRole = data.role; 
-        if (userRole === "USER") {
+        
+        localStorage.setItem('user_username', data.username);
+        localStorage.setItem('user_email', data.email);
+        localStorage.setItem('user_name', data.name);
+        localStorage.setItem('user_phoneNum', data.phoneNum);
+        localStorage.setItem('user_mobileNum', data.mobileNum);
+        if (data.state === 0) {
+          localStorage.setItem('user_state', 'INACTIVE');
+        } else if (data.state === 1) {
+          localStorage.setItem('user_state', 'ACTIVE');
+        }
+        localStorage.setItem('user_perfil', data.perfil);
+        localStorage.setItem('user_ocupation', data.ocupation);
+        localStorage.setItem('user_workspace', data.workspace);
+        localStorage.setItem('user_addr', data.addr);
+        localStorage.setItem('user_postal', data.postalCode);
+        localStorage.setItem('user_NIF', data.NIF);
+        localStorage.setItem('user_role', data.role);
+
+        if (data.role === "USER") {
           window.location.href = "/loggedUSER.html";
           return response.json;
         } else if (userRole === "GBO") {
