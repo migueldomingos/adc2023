@@ -13,7 +13,7 @@ public class UserClass {
         this.name = name;
     }
 
-    public UserClass(String username,String password,String email, String name, String phoneNum, String perfil,
+    public UserClass(String username, String password, String email, String name, String phoneNum, String perfil,
                      String mobileNum, long state, String ocupation, String workSpace, String addr, String postalCode,
                      String NIF, String role) {
         this.username = username;
@@ -119,5 +119,13 @@ public class UserClass {
 
     public void setMobileNum(String mobileNum) {
         this.mobileNum = mobileNum;
+    }
+
+    public String getPwd() {
+        return password;
+    }
+
+    public void setPwd(String pwd) {
+        this.password = pwd;
     }
 }

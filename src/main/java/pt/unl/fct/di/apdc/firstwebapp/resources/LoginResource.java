@@ -27,6 +27,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import pt.unl.fct.di.apdc.firstwebapp.util.AuthToken;
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
 import pt.unl.fct.di.apdc.firstwebapp.util.RegisterData;
+import pt.unl.fct.di.apdc.firstwebapp.util.UserClass;
 
 /*
  * Path 
@@ -100,7 +101,11 @@ public class LoginResource {
 				txn.put(tokenEnt);
 				LOG.info("User '" + data.username + "' logged in sucessfully.");
 				txn.commit();
-				return Response.ok(g.toJson(ent)).build();
+				UserClass userAux = new UserClass(ent.getString("user_username"), ent.getString("user_pwd") ,ent.getString("user_email"), ent.getString("user_name"), ent.getString("user_phone_num"),
+						ent.getString("user_perfil"), ent.getString("user_mobile_num"), ent.getLong("user_state"),ent.getString("user_ocupation"), ent.getString("user_workspace"),
+						ent.getString("user_addr"), ent.getString("user_postal"), ent.getString("user_NIF"), ent.getString("user_role"));
+				userAux.setPwd("");
+				return Response.ok(g.toJson(userAux)).build();
 			}
 			else {
 				LOG.warning("Wrong password for username: " + data.username);
