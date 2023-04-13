@@ -12,14 +12,14 @@
       <tr>
         <td>Username:</td>
         <td>
-          <input type="text" name="username">
+          <input type="text" id="username">
         </td>
       </tr>
 
       <tr>
         <td> Password:</td>
         <td>
-          <input type="password" name="user_pass">
+          <input type="password" id="user_pass">
         </td>
       </tr>
 
@@ -58,7 +58,7 @@
       })
       .then(response => response.json())
       .then((data) => {
-        
+        alert(data);
         localStorage.setItem('user_username', data.username);
         localStorage.setItem('user_email', data.email);
         localStorage.setItem('user_name', data.name);

@@ -26,26 +26,6 @@ public class RegisterResource {
 	public RegisterResource() {}
 	
 	@POST
-	@Path("/v1")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPersonToDatastoreV1(RegisterData data) {
-		if (!data.validRegistration())
-			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
-
-		Key userKey = datastore.newKeyFactory().setKind("User1").newKey(data.username);
-		Entity person = datastore.get(userKey);
-
-		if (person == null) {
-			person = Entity.newBuilder(userKey).set("user_pwd", DigestUtils.sha512Hex(data.password))
-											   .set("user_creation_time", Timestamp.now()).build();
-			datastore.put(person);
-			return Response.ok().build();
-		}
-
-		return Response.status(Status.FORBIDDEN).entity("User already registered.").build();
-	}
-	
-	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addPersonToDatastore(RegisterData data) {
