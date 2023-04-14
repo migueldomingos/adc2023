@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Logout</title>
+    </head>
+
+    <body>
+        <h3>Are you sure?</h3>
+
+        <table>
+            <tr>
+                <td><input type="submit" name="submit" value="Yes" onclick="logout()"></td>
+
+                <td><input type="submit" name="submit" value="No" onclick="history.back()"></td>
+            </tr>
+        </table>
+
+        <script>
+            var user_username = localStorage.getItem('user_username');
+
+            function logout() {
+                const url = "/rest/" + user_username;
+
+                fetch(url, {
+                    method: "GET",
+                    headers: {"Accept": "text/plain"}
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    window.location.href = "/index.html";
+                })
+                .catch(error => console.error(error));
+            }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </body>
+</html>

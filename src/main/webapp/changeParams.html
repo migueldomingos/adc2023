@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Change Parameters</title>
+    </head>
+
+    <body>
+        <h3>Insert which user you want to change and fill the spaces you want to change.</h3>
+
+        <form id="change_form">
+            <table>
+                <tr>
+                    <td>Username:</td>
+                    <td><input type="text" id="username" placeholder="* Enter Username Here *"></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input type="email" id="email" placeholder="Enter Email Here"></td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td><input type="text" id="name" placeholder="Enter Name Here"></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td>
+                        <input type="text" id="phoneNum" placeholder="Enter Phone Number Here">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mobile Number:</td>
+                    <td><input type="text" id="mobileNum" placeholder="Enter Mobile Number Here"></td>
+                </tr>
+                <tr>
+                    <td>Ocupation:</td>
+                    <td><input type="text" id="ocupation" placeholder="Enter Ocupation Here"></td>
+                </tr>
+                <tr>
+                    <td>Work Space:</td>
+                    <td><input type="text" id="workspace" placeholder="Enter Work Space Here"></td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td><input type="text" id="addr" placeholder="Enter Address Here"></td>
+                </tr>
+                <tr>
+                    <td>Postal Code:</td>
+                    <td><input type="text" id="postalCode" placeholder="Enter Postal Code Here"></td>
+                </tr>
+                <tr>
+                    <td>NIF:</td>
+                    <td><input type="text" id="NIF" placeholder="Enter NIF Here"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Change"></td>
+                </tr>
+                <tr>
+                <td>Note: if the space is between *, it is a mandatory parameter.</td>
+                </tr>
+            </table>
+        </form>
+
+        <script>
+            const form = document.getElementById("change_form");
+
+            form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const data = {
+                username: form.elements.username.value,
+                name: form.elements.name.value,
+                email: form.elements.email.value,
+                phoneNum: form.elements.phoneNum.value,
+                mobileNum: form.elements.mobileNum.value,
+                ocupation: form.elements.ocupation.value,
+                workspace: form.elements.workspace.value,
+                addr: form.elements.addr.value,
+                postalCode: form.elements.postalCode.value,
+                NIF: form.elements.NIF.value
+            };
+
+            var user_username = localStorage.getItem("user_username");
+            var role = localStorage.getItem("user_role");
+            const url = "/rest/change/params/" + user_username;
+
+            fetch(url, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                form.reset();
+                
+                if (role === "USER") {
+                    window.location.href = "/loggedUSER.html";
+                } else if (role === "GBO") {
+                    window.location.href = "/loggedGBO.html";
+                } else if (role === "GS") {
+                    window.location.href = "/loggedGS.html";
+                } else if (role === "SU") {
+                    window.location.href = "/loggedGS.html";
+                }
+            })
+            .catch(error => console.error(error));
+            });
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </body>
+</html>

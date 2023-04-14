@@ -76,7 +76,7 @@ public class LoginResource {
 				Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.username);
 				Entity tokenEnt = txn.get(tokenKey);
 
-				if (tokenEnt != null && tokenEnt.getLong("token_expiration") > Timestamp.now().toDate().getTime()) {
+				if (tokenEnt != null && tokenEnt.getLong("token_expiration") >= Timestamp.now().toDate().getTime()) {
 					LOG.warning("User already logged in");
 					txn.rollback();
 					return Response.status(Status.FORBIDDEN).entity("User already logged in.").build();

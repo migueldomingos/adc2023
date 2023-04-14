@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>List Users</title>
+    </head>
+
+    <body>
+        <h3>List of the users based on this users role</h3>
+        <ul id="user_list"></ul>
+
+        <script>
+            var username = localStorage.getItem("user_username");
+            var role = localStorage.getItem("user_role");
+
+            const url = "/rest/list/" + username;
+
+            fetch(url, {
+                    method: "GET",
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let html = "";
+
+                    if (role === "USER") {
+                        for (let i = 0; i < users.length; i++) {
+                            html += '<li>' + data[i].name + ', ' + data[i].username + ', ' + data[i].email + '</li>';
+                        }
+                    } else {
+                        for (let i = 0; i < users.length; i++) {
+                            html += '<li>' + data[i].name + ', ' + data[i].username + ', ' + data[i].email + 
+                                data[i].phoneNum + ', ' + data[i].mobileNum + ', ' + data[i].state + 
+                                data[i].perfil + ', ' + data[i].ocupation + ', ' + data[i].workspace + 
+                                data[i].addr + ', ' + data[i].postalCode + ', ' + data[i].NIF + data[i].role + '</li>';
+                        }
+                    }
+                    
+
+                    const userList = document.getElementById("user_list");
+                    userList.innerHTML = html;
+                })
+                .catch(error => console.error(error));
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    </body>
+
+</html>

@@ -44,11 +44,122 @@
 <div class="orange-bar"></div>
 
 <!-- The menu -->
-<div class="menu">
-    <a href="#" class="active">Home</a>
-    <a href="#">Operation 1</a>
-    <a href="#">Operation 2</a>
-    <a href="#">Operation 3</a>
-</div>
+  <div class="menu">
+    <a class="active">Home</a>
+    <a href="changePWD.html">Change Password</a>
+    <a href="changeParams.html">Change Parameters</a>
+    <a href="showToken.html">Show Token</a>
+    <a href="listUsers.html">List Users</a>
+    <a href="removeUser.html">Remove User</a>
+    <a href="logout.html">Logout</a>
+  </div>
+
+  <div>Welcome, <span id="user_username"></span>!</div>
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td>
+          <span id="user_name"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td>
+          <span id="user_email"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Phone Number:</td>
+        <td>
+          <span id="user_phoneNum"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Mobile Number:</td>
+        <td>
+          <span id="user_mobileNum"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>State:</td>
+        <td>
+          <span id="user_state"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Perfil:</td>
+        <td>
+          <span id="user_perfil"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Ocupation:</td>
+        <td>
+          <span id="user_ocupation"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Work Space:</td>
+        <td>
+          <span id="user_workspace"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td>
+          <span id="user_addr"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Postal Code:</td>
+        <td>
+          <span id="user_postal"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>NIF:</td>
+        <td>
+          <span id="user_NIF"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Role:</td>
+        <td>
+          <span id="user_role"></span>
+        </td>
+      </tr>
+    </table>
+
+    <script>
+      var user_username = localStorage.getItem('user_username');
+      var user_email = localStorage.getItem('user_email');
+      var user_name = localStorage.getItem('user_name');
+      var user_phoneNum = localStorage.getItem('user_phoneNum');
+      var user_mobileNum = localStorage.getItem('user_mobileNum');
+      var user_state = localStorage.getItem('user_state');
+      var user_perfil = localStorage.getItem('user_perfil');
+      var user_ocupation = localStorage.getItem('user_ocupation');
+      var user_workspace = localStorage.getItem('user_workspace');
+      var user_addr = localStorage.getItem('user_addr');
+      var user_postal = localStorage.getItem('user_postal');
+      var user_NIF = localStorage.getItem('user_NIF');
+      var user_role = localStorage.getItem('user_role');
+
+      if (user_username === null ||
+          user_email === null ||
+          user_name === null ||
+          user_phoneNum === null ||
+          user_mobileNum === null ||
+          user_state === null ||
+          user_perfil === null ||
+          user_ocupation === null ||
+          user_workspace === null ||
+          user_addr === null ||
+          user_postal === null ||
+          user_NIF === null ||
+          user_role === null) {
+        console.log('Error: Missing user data.');
+      }
+    </script>
 </body>
 </html>

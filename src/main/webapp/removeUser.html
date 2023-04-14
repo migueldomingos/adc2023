@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Remove User</title>
+    </head>
+
+    <body>
+        <h3>Which user do you want to remove?</h3>
+
+        <table>
+            <tr>
+                <td><input type="text" id="user_removed" placeholder="User To Be Removed"></td>
+                
+                <td><input type="submit" value="Remove" onclick="remove()"></td>
+            </tr>
+        </table>
+
+        <script>
+            var username = localStorage.getItem("user_username");
+            var userToRemove = document.getElementById("user_removed").value;
+
+            function remove() {
+                const url = "/rest/remove/" + username + "/" + userToRemove;
+
+                fetch(url, {
+                    method: "DELETE",
+                    headers: {"Accept": "text/plain"},
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    history.back();
+                })
+                .catch(error => console.error(error));
+            }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </body>
+
+</html>

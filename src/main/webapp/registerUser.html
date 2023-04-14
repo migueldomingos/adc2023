@@ -1,113 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
 
 </head>
 <body>
-<h3>Register Here</h3>
-<form id="regist_form">
-  <table>
-    <tr>
-      <td>Username:</td>
-      <td><input type="text" id="username" placeholder="* Enter Username Here *"></td>
-    </tr>
-    <tr>
-      <td>Password:</td>
-      <td><input type="password" id="password" placeholder="* Enter Password Here *"></td>
-    </tr>
-    <tr>
-      <td>Confirmation of Password:</td>
-      <td><input type="password" id="confirmation" placeholder="* Enter Password Here *"></td>
-    </tr>
-    <tr>
-      <td>Email:</td>
-      <td><input type="email" id="email" placeholder="* Enter Email Here *"></td>
-    </tr>
-    <tr>
-      <td>Name:</td>
-      <td><input type="text" id="name" placeholder="* Enter Name Here *"></td>
-    </tr>
-    <tr>
-      <td>Phone Number:</td>
-      <td>
-        <input type="text" id="phoneNum" placeholder="Enter Phone Number Here">
-      </td>
-    </tr>
-    <tr>
-      <td>Mobile Number:</td>
-      <td><input type="text" id="mobileNum" placeholder="Enter Mobile Number Here"></td>
-    </tr>
-    <tr>
-      <td>Ocupation:</td>
-      <td><input type="text" id="ocupation" placeholder="Enter Ocupation Here"></td>
-    </tr>
-    <tr>
-      <td>Work Space:</td>
-      <td><input type="text" id="workspace" placeholder="Enter Work Space Here"></td>
-    </tr>
-    <tr>
-      <td>Address:</td>
-      <td><input type="text" id="addr" placeholder="Enter Address Here"></td>
-    </tr>
-    <tr>
-      <td>Postal Code:</td>
-      <td><input type="text" id="postalCode" placeholder="Enter Postal Code Here"></td>
-    </tr>
-    <tr>
-      <td>NIF:</td>
-      <td><input type="text" id="NIF" placeholder="Enter NIF Here"></td>
-    </tr>
-    <tr>
-      <td><input type="submit"></td>
-      <td><p>Already a user? <a href="index.html">Login Here</a></p></td>
-    </tr>
+  <h3>Register Here</h3>
+  <form id="regist_form">
+    <table>
+      <tr>
+        <td>Username:</td>
+        <td><input type="text" id="username" placeholder="* Enter Username Here *"></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" id="password" placeholder="* Enter Password Here *"></td>
+      </tr>
+      <tr>
+        <td>Confirmation of Password:</td>
+        <td><input type="password" id="confirmation" placeholder="* Enter Password Here *"></td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td><input type="email" id="email" placeholder="* Enter Email Here *"></td>
+      </tr>
+      <tr>
+        <td>Name:</td>
+        <td><input type="text" id="name" placeholder="* Enter Name Here *"></td>
+      </tr>
+      <tr>
+        <td>Phone Number:</td>
+        <td>
+          <input type="text" id="phoneNum" placeholder="Enter Phone Number Here">
+        </td>
+      </tr>
+      <tr>
+        <td>Mobile Number:</td>
+        <td><input type="text" id="mobileNum" placeholder="Enter Mobile Number Here"></td>
+      </tr>
+      <tr>
+        <td>Ocupation:</td>
+        <td><input type="text" id="ocupation" placeholder="Enter Ocupation Here"></td>
+      </tr>
+      <tr>
+        <td>Work Space:</td>
+        <td><input type="text" id="workspace" placeholder="Enter Work Space Here"></td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td><input type="text" id="addr" placeholder="Enter Address Here"></td>
+      </tr>
+      <tr>
+        <td>Postal Code:</td>
+        <td><input type="text" id="postalCode" placeholder="Enter Postal Code Here"></td>
+      </tr>
+      <tr>
+        <td>NIF:</td>
+        <td><input type="text" id="NIF" placeholder="Enter NIF Here"></td>
+      </tr>
+      <tr>
+        <td><input type="submit" value="Register"></td>
+        <td><p>Already a user? <a href="index.html">Login Here</a></p></td>
+      </tr>
 
-  </table>
-  <tr>
-    <td>Note: if the space is between *, it is a mandatory parameter.</td>
-  </tr>
-</form>
+    </table>
+    <tr>
+      <td>Note: if the space is between *, it is a mandatory parameter.</td>
+    </tr>
+  </form>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script>
-  const form = document.getElementById("regist_form");
+  <script>
+    const form = document.getElementById("regist_form");
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
 
-    const data = {
-        username: form.elements.username.value,
-				name: form.elements.name.value,
-				password: form.elements.password.value,
-				confirmation: form.elements.confirmation.value,
-				email: form.elements.email.value,
-				phoneNum: form.elements.phoneNum.value,
-				mobileNum: form.elements.mobileNum.value,
-				ocupation: form.elements.ocupation.value,
-				workspace: form.elements.workspace.value,
-				addr: form.elements.addr.value,
-				postalCode: form.elements.postalCode.value,
-				NIF: form.elements.NIF.value
-    };
+      const data = {
+          username: form.elements.username.value,
+          name: form.elements.name.value,
+          password: form.elements.password.value,
+          confirmation: form.elements.confirmation.value,
+          email: form.elements.email.value,
+          phoneNum: form.elements.phoneNum.value,
+          mobileNum: form.elements.mobileNum.value,
+          ocupation: form.elements.ocupation.value,
+          workspace: form.elements.workspace.value,
+          addr: form.elements.addr.value,
+          postalCode: form.elements.postalCode.value,
+          NIF: form.elements.NIF.value
+      };
 
-    const url = "/rest/register/add"
+      const url = "/rest/register/add"
 
-    fetch(url, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data)
-    })
-    .then(response => response)
-    .then(data => {
-      form.reset();
-      window.location.href = "/index.html";
-    })
-    .catch(error => console.error(error));
-  });
-</script>
+      fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(data => {
+        form.reset();
+        window.location.href = "/index.html";
+      })
+      .catch(error => console.error(error));
+    });
+  </script>
 
 </body>
 </html>

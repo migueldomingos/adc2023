@@ -1,6 +1,5 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
-import java.time.Instant;
 import java.util.UUID;
 
 public class AuthToken {

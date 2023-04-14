@@ -28,7 +28,7 @@ public class ChangeParamResource {
     @POST
     @Path("/params/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeParams (@PathParam("username") String username, UserClass data) { //nao esquecer de comecar transacao antes (verificar se o user existe antes de qualquer update)
+    public Response changeParams (@PathParam("username") String username, UserClass data) {
         //username do pathparam vai ser o user que quer mudar a info
         //data vai ter a info que vais ser modificada
 
@@ -79,40 +79,41 @@ public class ChangeParamResource {
             String userPostalAux = userMod.getString("user_postal");
             String userNIFAux = userMod.getString("user_NIF");
 
-            if (!phoneNumAux.equals(data.phoneNum))
+            if (data.phoneNum != "" && !phoneNumAux.equals(data.phoneNum))
                 phoneNumAux = data.phoneNum;
 
-            if (mobileNumAux != data.mobileNum)
+            if (data.mobileNum != "" && !mobileNumAux.equals(data.mobileNum))
                 mobileNumAux = data.mobileNum;
 
-            if (userStateAux != data.state && data.state == 1)
+            if (userStateAux != data.state && (data.state == 1 || data.state == 0))
                 userStateAux = data.state;
 
-            if (!userNameAux.equals(data.name))
+            if (data.name != "" && !userNameAux.equals(data.name))
                 userNameAux = data.name;
 
-            if (!userEmailAux.equals(data.email))
+            if (data.email != "" && !userEmailAux.equals(data.email))
                 userEmailAux = data.email;
 
-            if (!userRoleAux.equals(data.role))
+            if (!userRoleAux.equals(data.role) && (userRoleAux.equals("USER") || userRoleAux.equals("GBO")
+                    || userRoleAux.equals("GA") || userRoleAux.equals("GS") || userRoleAux.equals("SU")))
                 userRoleAux = data.role;
 
-            if (!userPerfilAux.equals(data.perfil))
+            if (data.perfil != "" && !userPerfilAux.equals(data.perfil))
                 userPerfilAux = data.perfil;
 
-            if (!userOcupationAux.equals(data.ocupation))
+            if (data.ocupation != "" && !userOcupationAux.equals(data.ocupation))
                 userOcupationAux = data.ocupation;
 
-            if (!userWorkSpaceAux.equals(data.workspace))
+            if (data.workspace != "" && !userWorkSpaceAux.equals(data.workspace))
                 userWorkSpaceAux = data.workspace;
 
-            if (!userAddrAux.equals(data.addr))
+            if (data.addr != "" && !userAddrAux.equals(data.addr))
                 userAddrAux = data.addr;
 
-            if (!userPostalAux.equals(data.postalCode))
+            if (data.postalCode != "" && !userPostalAux.equals(data.postalCode))
                 userPostalAux = data.postalCode;
 
-            if (!userNIFAux.equals(data.NIF))
+            if (data.NIF != "" && !userNIFAux.equals(data.NIF))
                 userNIFAux = data.NIF;
 
             Entity userAux;

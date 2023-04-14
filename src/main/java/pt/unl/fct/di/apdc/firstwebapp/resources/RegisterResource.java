@@ -47,7 +47,7 @@ public class RegisterResource {
 				txn.rollback();
 				return Response.status(Status.BAD_REQUEST).entity("User already exists.").build();
 			} else {
-				//user_role = USER | GS | GBO | SU
+				//user_role = USER | GS | GBO | GA | SU
 				//user_state = 0 (INATIVO) | 1 (ATIVO)
 
 				user = Entity.newBuilder(userKey)

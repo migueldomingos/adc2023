@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Change Password</title>
+    </head>
+
+    <body>
+        <h3>
+            Insert the new password and confirm it.
+        </h3>
+        
+        <table>
+            <tr>
+                <td>Current Password:</td>
+                <td><input type="password" id="cur_pwd" placeholder="Enter Password Here"></td>
+            </tr>
+            <tr>
+                <td>New Password:</td>
+                <td><input type="password" id="new_pwd" placeholder="Enter Password Here"></td>
+            </tr>
+            <tr>
+                <td>New Password Confirmation:</td>
+                <td><input type="password" id="conf" placeholder="Enter Confirmation Here"></td>
+            </tr>
+            <tr>
+                <td><td><input type="submit" value="Change" onclick="changePwd()"></td></td>
+            </tr>
+        </table>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            function changePwd() {
+                var username = localStorage.getItem("user_username");
+                var role = localStorage.getItem("user_role");
+
+                var newPwd = document.getElementById("new_pwd").value;
+                var curPwd = document.getElementById("cur_pwd").value;
+                var confNewPwd = document.getElementById("conf").value;
+
+                const url = "/rest/change/pwd";
+
+                const data = {
+                    username, curPwd, newPwd, confNewPwd
+                };
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (role === "USER") {
+                        window.location.href = "/loggedUSER.html";
+                    } else if (role === "GBO") {
+                        window.location.href = "/loggedGBO.html";
+                    } else if (role === "GS") {
+                        window.location.href = "/loggedGS.html";
+                    } else if (role === "SU") {
+                        window.location.href = "/loggedGS.html";
+                    }
+                })
+                .catch(error => console.error(error));
+            }
+
+
+            
+        </script>
+        
+    </body>
+
+</html>

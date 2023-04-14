@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Show Token</title>
+    </head>
+
+    <script>
+        function show_token() {
+            var username = localStorage.getItem("user_username");
+            const url = "/rest/token/show/" + username;
+
+            fetch(url, {
+                    method: "GET",
+                    headers: {"Content-Type": "application/json"}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("token_username").innerHTML = data.username;
+                    document.getElementById("token_id").innerHTML = data.tokenID;
+                    document.getElementById("token_creation").innerHTML = new Date(data.creationData);
+                    document.getElementById("token_exp").innerHTML = new Date(data.expirationData);
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
+
+    <body>
+        <h3>Token Parameters</h3>
+        <table>
+            <tr>
+                <td>Username:</td>
+                <td>
+                    <span id="token_username"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Token ID:</td>
+                <td>
+                    <span id="token_id"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Creation time:</td>
+                <td>
+                    <span id="token_creation"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Expiration time:</td>
+                <td>
+                    <span id="token_exp"></span>
+                </td>
+            </tr>
+        </table>
+
+        <script>
+            show_token();
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+    </body>
+</html>
