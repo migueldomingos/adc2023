@@ -236,7 +236,7 @@ public class ChangeParamResource {
 
             if (user == null) {
                 txn.rollback();
-                return Response.status(Status.BAD_REQUEST).entity("User does not exist").build();
+                return Response.status(Status.CONFLICT).entity("User does not exist").build();
             }
 
             Entity userAux = Entity.newBuilder(userKey)

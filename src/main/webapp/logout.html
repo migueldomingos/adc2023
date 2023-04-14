@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Logout</title>
@@ -17,10 +17,10 @@
         </table>
 
         <script>
-            var user_username = localStorage.getItem('user_username');
+            var user_username = localStorage.getItem('user_username').value;
 
             function logout() {
-                const url = "/rest/" + user_username;
+                const url = "/rest/logout/" + user_username;
 
                 fetch(url, {
                     method: "GET",

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <title>My First Web App</title>
   </head>
 
@@ -54,7 +54,6 @@
         })
         .then(response => response.json())
         .then((data) => {
-          alert(data);
           localStorage.setItem('user_username', data.username);
           localStorage.setItem('user_email', data.email);
           localStorage.setItem('user_name', data.name);
@@ -83,7 +82,7 @@
             window.location.href = "/loggedGS.html";
             return response.json;
           } else if (data.role === "SU") {
-            window.location.href = "/loggedGS.html";
+            window.location.href = "/loggedSU.html";
             return response.json;
           }
         })

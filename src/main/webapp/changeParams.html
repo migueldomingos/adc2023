@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Change Parameters</title>
@@ -26,6 +26,12 @@
                     <td>Phone Number:</td>
                     <td>
                         <input type="text" id="phoneNum" placeholder="Enter Phone Number Here">
+                    </td>
+                </tr>
+                <tr>
+                    <td>State:</td>
+                    <td>
+                        <input type="number" id="state" placeholder="Active or Inactive" min="0" max="1">
                     </td>
                 </tr>
                 <tr>
@@ -63,6 +69,7 @@
 
         <script>
             const form = document.getElementById("change_form");
+                
 
             form.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -80,8 +87,8 @@
                 NIF: form.elements.NIF.value
             };
 
-            var user_username = localStorage.getItem("user_username");
-            var role = localStorage.getItem("user_role");
+            var user_username = localStorage.getItem("user_username").value;
+            var role = localStorage.getItem("user_role").value;
             const url = "/rest/change/params/" + user_username;
 
             fetch(url, {

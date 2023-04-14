@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Change Password</title>
@@ -31,8 +31,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
             function changePwd() {
-                var username = localStorage.getItem("user_username");
-                var role = localStorage.getItem("user_role");
+                var username = localStorage.getItem("user_username").value;
+                var role = localStorage.getItem("user_role").value;
 
                 var newPwd = document.getElementById("new_pwd").value;
                 var curPwd = document.getElementById("cur_pwd").value;
