@@ -28,7 +28,7 @@ public class ChangeParamResource {
     @POST
     @Path("/params/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeParams (@PathParam("username") String username, UserClass data) {
+    public Response changeParams (@PathParam("username") String username, ChangeParamsClass data) {
         //username do pathparam vai ser o user que quer mudar a info
         //data vai ter a info que vais ser modificada
 
@@ -119,7 +119,7 @@ public class ChangeParamResource {
             Entity userAux;
 
             if (user.getString("user_role").equals("USER") && user.getString("user_username").equals(data.username)) {
-                userAux = Entity.newBuilder(userKey)
+                userAux = Entity.newBuilder(userModKey)
                         .set("user_username", data.username) //NAO MUDA
                         .set("user_name", user.getString("user_name")) //NAO MUDA
                         .set("user_pwd", user.getString("user_pwd")) //NAO MUDA
@@ -138,7 +138,7 @@ public class ChangeParamResource {
                         .build();
 
             } else if (user.getString("user_role").equals("GBO") && userMod.getString("user_role").equals("USER")) {
-                userAux = Entity.newBuilder(userKey)
+                userAux = Entity.newBuilder(userModKey)
                         .set("user_username", data.username) //NAO MUDA
                         .set("user_name", userNameAux)
                         .set("user_pwd", userMod.getString("user_pwd")) //NAO MUDA
@@ -157,7 +157,7 @@ public class ChangeParamResource {
                         .build();
 
             } else if (user.getString("user_role").equals("GS") && (userMod.getString("user_role").equals("USER") || userMod.getString("user_role").equals("GBO"))) {
-                userAux = Entity.newBuilder(userKey)
+                userAux = Entity.newBuilder(userModKey)
                         .set("user_username", data.username) //NAO MUDA
                         .set("user_name", userNameAux)
                         .set("user_pwd", userMod.getString("user_pwd")) //NAO MUDA
@@ -175,7 +175,7 @@ public class ChangeParamResource {
                         .set("user_NIF", userNIFAux)
                         .build();
             } else {
-                userAux = Entity.newBuilder(userKey)
+                userAux = Entity.newBuilder(userModKey)
                         .set("user_username", data.username) //NAO MUDA
                         .set("user_name", userNameAux)
                         .set("user_pwd", userMod.getString("user_pwd")) //NAO MUDA
@@ -245,11 +245,11 @@ public class ChangeParamResource {
                     .set("user_pwd", DigestUtils.sha512Hex(data.newPwd))
                     .set("user_email", user.getString("user_email"))
                     .set("user_creation_time", user.getTimestamp("user_creation_time"))
-                    .set("user_phone_num", user.getLong("user_phone_num"))
+                    .set("user_phone_num", user.getString("user_phone_num"))
                     .set("user_role", user.getString("user_role"))
                     .set("user_state", user.getLong("user_state")) //user_state = INATIVO
                     .set("user_perfil", user.getString("user_perfil"))
-                    .set("user_mobile_num", user.getLong("user_mobile_num"))
+                    .set("user_mobile_num", user.getString("user_mobile_num"))
                     .set("user_ocupation", user.getString("user_ocupation"))
                     .set("user_workspace", user.getString("user_workspace"))
                     .set("user_addr", user.getString("user_addr"))

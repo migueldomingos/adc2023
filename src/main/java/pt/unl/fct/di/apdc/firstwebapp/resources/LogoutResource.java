@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.logging.Logger;
 
-@Path("/logout") //
+@Path("/logout") 
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class LogoutResource {
     private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
@@ -20,7 +20,7 @@ public class LogoutResource {
 
     public LogoutResource() {} //construtor
 
-    @GET
+    @DELETE
     @Path("/{username}")
     public Response logOutUser(@PathParam("username") String username) {
         Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(username);

@@ -17,15 +17,14 @@
         </table>
 
         <script>
-            var username = localStorage.getItem("user_username");
-            var userToRemove = document.getElementById("user_removed").value;
-
             function remove() {
+                var username = localStorage.getItem("user_username");
+                var userToRemove = document.getElementById("user_removed").value;
                 const url = "/rest/remove/" + username + "/" + userToRemove;
 
                 fetch(url, {
                     method: "DELETE",
-                    headers: {"Accept": "text/plain"},
+                    headers: {'Content-Type': 'application/json'},
                 })
                 .then(response => response.text())
                 .then(data => {

@@ -69,7 +69,6 @@
 
         <script>
             const form = document.getElementById("change_form");
-                
 
             form.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -87,8 +86,8 @@
                 NIF: form.elements.NIF.value
             };
 
-            var user_username = localStorage.getItem("user_username").value;
-            var role = localStorage.getItem("user_role").value;
+            var user_username = localStorage.getItem("user_username");
+            var role = localStorage.getItem("user_role");
             const url = "/rest/change/params/" + user_username;
 
             fetch(url, {

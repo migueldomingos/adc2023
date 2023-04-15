@@ -10,8 +10,8 @@
         <ul id="user_list"></ul>
 
         <script>
-            var username = localStorage.getItem("user_username").value;
-            var role = localStorage.getItem("user_role").value;
+            var username = localStorage.getItem("user_username");
+            var role = localStorage.getItem("user_role");
 
             const url = "/rest/list/" + username;
 
@@ -22,7 +22,7 @@
                 .then(response => response.json())
                 .then(data => {
                     let html = "";
-                    alert(data[0]);
+                    alert(data[0].name);
 
                     if (role === "USER") {
                         for (let i = 0; i < users.length; i++) {
