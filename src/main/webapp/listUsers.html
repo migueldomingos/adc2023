@@ -22,18 +22,17 @@
                 .then(response => response.json())
                 .then(data => {
                     let html = "";
-                    alert(data[0].name);
 
                     if (role === "USER") {
-                        for (let i = 0; i < users.length; i++) {
+                        for (let i = 0; i < data.length; i++) {
                             html += '<li>' + data[i].name + ', ' + data[i].username + ', ' + data[i].email + '</li>';
                         }
                     } else {
-                        for (let i = 0; i < users.length; i++) {
-                            html += '<li>' + data[i].name + ', ' + data[i].username + ', ' + data[i].email + 
-                                data[i].phoneNum + ', ' + data[i].mobileNum + ', ' + data[i].state + 
-                                data[i].perfil + ', ' + data[i].ocupation + ', ' + data[i].workspace + 
-                                data[i].addr + ', ' + data[i].postalCode + ', ' + data[i].NIF + data[i].role + '</li>';
+                        for (let i = 0; i < data.length; i++) {
+                            html += '<li>' + data[i].name + ', ' + data[i].username + ', ' + data[i].email + ', ' +
+                                data[i].phoneNum + ', ' + data[i].mobileNum + ', ' + data[i].state + ', ' +
+                                data[i].perfil + ', ' + data[i].ocupation + ', ' + data[i].workspace + ', ' +
+                                data[i].addr + ', ' + data[i].postalCode + ', ' + data[i].NIF + ', ' + data[i].role + '</li>';
                         }
                     }
                     

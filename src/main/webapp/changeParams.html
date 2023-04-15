@@ -35,6 +35,18 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Role:</td>
+                    <td>
+                        <input type="text" id="role" placeholder="Enter Role Here">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Perfil:</td>
+                    <td>
+                        <input type="text" id="perfil" placeholder="Enter Perfil Here">
+                    </td>
+                </tr>
+                <tr>
                     <td>Mobile Number:</td>
                     <td><input type="text" id="mobileNum" placeholder="Enter Mobile Number Here"></td>
                 </tr>
@@ -83,7 +95,10 @@
                 workspace: form.elements.workspace.value,
                 addr: form.elements.addr.value,
                 postalCode: form.elements.postalCode.value,
-                NIF: form.elements.NIF.value
+                NIF: form.elements.NIF.value,
+                state: form.elements.state.value,
+                perfil: form.elements.perfil.value,
+                role: form.elements.role.value
             };
 
             var user_username = localStorage.getItem("user_username");
@@ -106,7 +121,7 @@
                 } else if (role === "GS") {
                     window.location.href = "/loggedGS.html";
                 } else if (role === "SU") {
-                    window.location.href = "/loggedGS.html";
+                    window.location.href = "/loggedSU.html";
                 }
             })
             .catch(error => console.error(error));
